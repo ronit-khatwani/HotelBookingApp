@@ -12,7 +12,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { CustomText, CustomButton } from '../components';
-import BottomTabBar from '../components/BottomTabBar';
 import { COLORS, SIZES, scale, verticalScale, SHADOWS } from '../theme';
 import { DUMMY_HOTELS, AMENITIES } from '../data/dummyData';
 
@@ -133,7 +132,10 @@ const HotelsListScreen = ({ navigation, route }) => {
 
       {/* Header */}
       <View style={styles.header}>
-        <View>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-left" size={24} color={COLORS.textPrimary} />
+        </TouchableOpacity>
+        <View style={styles.headerTitle}>
           <CustomText variant="h4" weight="bold" color={COLORS.textPrimary}>
             Hotels
           </CustomText>
@@ -194,14 +196,25 @@ const HotelsListScreen = ({ navigation, route }) => {
 
       {renderAmenitiesModal()}
       
-      <BottomTabBar
-        activeTab="Rooms"
-        onTabPress={(tab) => {
-          if (tab === 'CarBooking') navigation.navigate('CarBooking');
-          if (tab === 'Profile') navigation.navigate('Profile');
-          if (tab === 'Rooms') navigation.navigate('Home');
-        }}
-      />
+      {/* Bottom Tab Bar */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Home')}>
+          <Icon name="home" size={24} color={COLORS.primary} />
+          <CustomText variant="caption" color={COLORS.primary}>Home</CustomText>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('CarBooking')}>
+          <Icon name="car" size={24} color={COLORS.tabInactive} />
+          <CustomText variant="caption" color={COLORS.tabInactive}>Car</CustomText>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Profile')}>
+          <Icon name="account" size={24} color={COLORS.tabInactive} />
+          <CustomText variant="caption" color={COLORS.tabInactive}>Profile</CustomText>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.tabItem} onPress={() => navigation.navigate('Settings')}>
+          <Icon name="cog" size={24} color={COLORS.tabInactive} />
+          <CustomText variant="caption" color={COLORS.tabInactive}>Settings</CustomText>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -217,6 +230,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: SIZES.paddingHorizontal,
     paddingVertical: SIZES.md,
+  },
+  backButton: {
+    marginRight: SIZES.md,
+  },
+  headerTitle: {
+    flex: 1,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -341,6 +360,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: SIZES.radiusMedium,
     marginLeft: SIZES.sm,
+  },
+  tabBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    backgroundColor: COLORS.white,
+    paddingTop: SIZES.sm,
+    paddingBottom: verticalScale(25),
+    borderTopWidth: 1,
+    borderTopColor: COLORS.borderLight,
+    ...SHADOWS.medium,
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
